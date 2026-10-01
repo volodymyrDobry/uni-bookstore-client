@@ -27,7 +27,12 @@ RUN npm run build
 # ================================
 # Stage 2: Runtime
 # ================================
-FROM nginx:1.27-alpine AS runtime
+FROM nginx:1.29-alpine AS runtime
+
+# Patch OS packages (e.g. openssl/libssl/libcrypto) so the image picks up
+# security fixes that are not yet baked into the published base tag.
+# Keeps the Trivy CRITICAL gate green.
+RUN apk upgrade --no-cache
 
 # Remove default nginx static assets
 RUN rm -rf /usr/share/nginx/html/*
