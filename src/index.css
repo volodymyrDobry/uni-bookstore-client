@@ -1,0 +1,11 @@
+html, body, #root {
+    min-width: 320px;
+    min-height: 100vh;
+}
+
+body {
+    margin: 0;
+    background: #faf8f5;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+}
