@@ -1,4 +1,4 @@
-import {AdminPanelSettingsOutlined, LogoutOutlined, MenuBookOutlined, ShoppingBasketOutlined} from "@mui/icons-material";
+import {AdminPanelSettingsOutlined, LogoutOutlined, MenuBookOutlined, ReceiptLongOutlined, ShoppingBasketOutlined, StorefrontOutlined} from "@mui/icons-material";
 import {AppBar, Badge, Box, Button, Container, IconButton, Toolbar, Tooltip, Typography} from "@mui/material";
 import {NavLink, useLocation} from "react-router-dom";
 import {PAGE_ROUTES} from "../../constants/routingConstants.ts";
@@ -44,6 +44,16 @@ export function Header() {
                         </Badge>
                     </IconButton>
                 </Tooltip>
+                <Tooltip title="My orders">
+                    <IconButton component={NavLink} to={PAGE_ROUTES.orders} color="inherit" aria-label="Open my orders" sx={navigationButtonSx(PAGE_ROUTES.orders)}>
+                        <ReceiptLongOutlined/>
+                    </IconButton>
+                </Tooltip>
+                {isAdmin && <Tooltip title="Order operations">
+                    <IconButton component={NavLink} to={PAGE_ROUTES.adminOrders} color="inherit" aria-label="Open order operations" sx={navigationButtonSx(PAGE_ROUTES.adminOrders)}>
+                        <StorefrontOutlined/>
+                    </IconButton>
+                </Tooltip>}
                 {isAdmin && <Tooltip title="Book administration">
                     <IconButton component={NavLink} to={PAGE_ROUTES.admin} color="inherit" aria-label="Open book administration" sx={navigationButtonSx(PAGE_ROUTES.admin)}>
                         <AdminPanelSettingsOutlined/>
