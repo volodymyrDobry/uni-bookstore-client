@@ -1,18 +1,39 @@
-import {Alert, Button, Container, Paper, Skeleton, Snackbar, Stack, Typography} from "@mui/material";
-import {MenuBookOutlined} from "@mui/icons-material";
-import {Link} from "react-router-dom";
+import {Alert, Button, CircularProgress, Container, Divider, Paper, Skeleton, Snackbar, Stack, Typography} from "@mui/material";
+import {MenuBookOutlined, ShoppingCartCheckoutOutlined} from "@mui/icons-material";
+import {Link, useNavigate} from "react-router-dom";
 import {useState} from "react";
 import {useCurrentUser} from "../../hooks/authHooks.ts";
 import {useBasket} from "../../hooks/useBasket.ts";
+import {useOrders} from "../../hooks/useOrders.ts";
 import {BasketItemRow} from "./components/BasketItemRow.tsx";
-import {getErrorMessage} from "../../utils/errorUtils.ts";
+import {getErrorMessage, hasStatus} from "../../utils/errorUtils.ts";
 import {PAGE_ROUTES} from "../../constants/routingConstants.ts";
 
 export function BasketPage() {
     const {auth} = useCurrentUser();
-    const {basket, update, remove} = useBasket(auth.user?.access_token);
+    const token = auth.user?.access_token;
+    const navigate = useNavigate();
+    const {basket, update, remove} = useBasket(token);
+    const {place} = useOrders(token);
     const [notice, setNotice] = useState<{severity: "success" | "error"; message: string}>();
     const items = basket.data?.items ?? [];
+
+    const placeOrder = () => {
+        place.mutate(undefined, {
+            onSuccess: () => navigate(PAGE_ROUTES.orders),
+            onError: (error) => {
+                if (hasStatus(error, 401)) {
+                    void auth.signinRedirect();
+                    return;
+                }
+                // 409 = empty basket or insufficient stock: keep the cart, show why.
+                setNotice({
+                    severity: "error",
+                    message: getErrorMessage(error, "Your order could not be placed."),
+                });
+            },
+        });
+    };
 
     const updateItem = (bookId: number, quantity: number) => {
         update.mutate({bookId, quantity}, {
@@ -62,6 +83,18 @@ export function BasketPage() {
                     onSave={updateItem}
                     onRemove={removeItem}
                 />)}
+                <Divider sx={{pt: 1}}/>
+                <Stack direction="row" sx={{justifyContent: "flex-end"}}>
+                    <Button
+                        variant="contained"
+                        size="large"
+                        startIcon={place.isPending ? <CircularProgress size={18} color="inherit"/> : <ShoppingCartCheckoutOutlined/>}
+                        disabled={place.isPending || items.length === 0}
+                        onClick={placeOrder}
+                    >
+                        {place.isPending ? "Placing order…" : "Place order"}
+                    </Button>
+                </Stack>
             </Stack>}
         </Stack>
         <Snackbar open={Boolean(notice)} autoHideDuration={3500} onClose={() => setNotice(undefined)}>
