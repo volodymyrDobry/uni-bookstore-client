@@ -4,4 +4,5 @@ export const API_PATHS = {
     orders: "/api/v1/orders",
     adminOrderStream: "/api/v1/admin/orders/stream",
     adminReceiptsExport: "/api/v1/admin/orders/receipts/export",
+    lowStockDigests: "/api/v1/books/low-stock-digests",
 } as const;

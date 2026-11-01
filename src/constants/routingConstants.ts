@@ -4,6 +4,7 @@ export const PAGE_ROUTES = {
     orders: "/orders",
     admin: "/admin/books",
     adminOrders: "/admin/orders",
+    adminDigests: "/admin/low-stock",
     login: "/login",
     authCallback: "/auth/callback",
 } as const;

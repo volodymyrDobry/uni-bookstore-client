@@ -1,9 +1,13 @@
 import {API_PATHS} from "../constants/apiConstants.ts";
 
-// Use the same origin by default. Vite proxies this path in development and
-// Nginx proxies it in the container deployment, which also keeps API PATCH
-// requests out of the browser's cross-origin/CORS path.
-export const API_BASE = import.meta.env.VITE_API_URL ?? "http://localhost:8081";
+// Same origin by default (empty base → relative "/api/..." URLs). Vite proxies
+// this path in development and Nginx proxies it in the container deployment,
+// which also keeps API PATCH requests out of the browser's cross-origin/CORS
+// path and lets the gateway fan requests out to the right microservice.
+// Only set VITE_API_URL to call a single backend directly (bypassing the
+// gateway) — note that misroutes order endpoints, which live on a separate
+// service.
+export const API_BASE = import.meta.env.VITE_API_URL ?? "";
 
 export class ApiError extends Error {
     public readonly status: number;

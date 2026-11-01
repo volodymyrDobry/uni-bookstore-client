@@ -3,6 +3,7 @@ import {AppLayout} from "./components/Layout/AppLayout.tsx";
 import {PAGE_ROUTES} from "./constants/routingConstants.ts";
 import {AdminPage} from "./pages/AdminPage/AdminPage.tsx";
 import {AdminOrdersPage} from "./pages/AdminOrdersPage/AdminOrdersPage.tsx";
+import {AdminDigestsPage} from "./pages/AdminDigestsPage/AdminDigestsPage.tsx";
 import {BasketPage} from "./pages/BasketPage/BasketPage.tsx";
 import {OrdersPage} from "./pages/OrdersPage/OrdersPage.tsx";
 import {CatalogPage} from "./pages/CatalogPage/CatalogPage.tsx";
@@ -22,6 +23,7 @@ export const routes: RouteObject[] = [
                 {path: PAGE_ROUTES.orders, element: <OrdersPage/>},
                 {path: PAGE_ROUTES.admin, element: <AdminRoute><AdminPage/></AdminRoute>},
                 {path: PAGE_ROUTES.adminOrders, element: <AdminRoute><AdminOrdersPage/></AdminRoute>},
+                {path: PAGE_ROUTES.adminDigests, element: <AdminRoute><AdminDigestsPage/></AdminRoute>},
             ]
         }]
     },
