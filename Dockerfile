@@ -1,7 +1,9 @@
 # ================================
 # Stage 1: Build
 # ================================
-FROM node:24-alpine AS builder
+# Build on the native runner arch (static assets are arch-independent); only the
+# nginx runtime base varies per target platform — fast multi-arch, no emulation.
+FROM --platform=$BUILDPLATFORM node:24-alpine AS builder
 
 WORKDIR /app
 
